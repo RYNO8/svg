@@ -25,6 +25,12 @@ SVG_XMLNS_DEFAULT = 'http://www.w3.org/2000/svg'
 INDENT = "\t"
 
 def _format_kwargs(kwargs):
+    """Returns a dictionary as key value pairs to be used in tags
+     
+    Usage:
+     >>> _format_kwargs({a:1, b:"2"})
+     a="1" b="2"
+    """
     element_as_str = []
     for key, value in kwargs.items():
         element_as_str.append('{}="{}"'.format(key, value))
@@ -145,7 +151,7 @@ class ParentTag(Tag):
     # prints svg representation in console, im not sure if this is a helpful thing to have
     __repr__ = __str__
     
-    def add_child(self, animation):
+    def add_child(self, child):
         """Adds a child element to the tag.
 
         Args:
@@ -158,7 +164,7 @@ class ParentTag(Tag):
           >>> c.add_child(a)
         """
 
-        self.children.append(animation)
+        self.children.append(child)
 
 class Circle(ParentTag):
     """Represents an xml circle tag.
