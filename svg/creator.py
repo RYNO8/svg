@@ -18,6 +18,9 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+from PySide2 import QtCore, QtGui, QtWidgets
+from PySide2.QtNetwork import QNetworkProxy, QNetworkProxyFactory
+from PySide2.QtWebEngineWidgets import QWebEngineView
 
 import svg.elements as elements
 import svg.errors as errors
@@ -83,3 +86,24 @@ class Creator(elements.Svg):
 
         with open(outfile_path, 'w+') as outfile:
             outfile.write(XML_CONTENT.format(str(self)))
+            
+    def view(self):
+        """Renders the contents of the creator using QT"""
+        qt_app = QtWidgets.QApplication()
+        
+        disp = QtWidgets.QWidget()
+        disp.resize(800,600)
+        disp.webview = QWebEngineView(disp)
+        disp.webview.setHtml(XML_CONTENT.format(str(self)))
+        disp.verticalLayout = QtWidgets.QVBoxLayout(disp)
+        disp.verticalLayout.addWidget(disp.webview)
+        disp.setWindowTitle("Display SVG")
+        
+        act = QtWidgets.QAction("Close", disp)
+        act.setShortcuts([QtGui.QKeySequence(QtCore.Qt.Key_Escape)])
+        act.triggered.connect(disp.close)
+        disp.addAction(act)
+        
+        disp.show()
+        qt_app.exec_()
+    
